@@ -1,7 +1,7 @@
 from tokopedia import *
 
-
-search("Redmi Note 11")
+# you have to input a key word in search()
+search("cover spion jazz gk5")
 load_boxInfo()
 scrol_down(10)
 print_info()

@@ -13,18 +13,27 @@ driver.get('https://tokopedia.com')
 action = ActionChains(driver)
 wait = WebDriverWait(driver, 5)
 
-columns = ["name", "price", "shop","location"]
-with open("hasil.csv", "w", newline="", encoding="utf-8") as write:
-    write = csv.writer(write)
-    write.writerow(columns)
 
 def search(keyword):
+# manipulasi link
+    global key_string
+    key_string = keyword
+    key_list = key_string.split(" ")
+    key_string = "%20".join(key_list)
+
+# create file
+    
+    columns = ["name", "price", "shop","location"]
+    with open(key_string+".csv", "w", newline="", encoding="utf-8") as write:
+        write = csv.writer(write)
+        write.writerow(columns)
+
 # Wait then find search bar
     try: 
         search_bar = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".css-ubsgp5")))
         search_bar.clear() # search bar ga mau diclear
         search_bar.send_keys(keyword)
-        
+
 #find submit button
         search_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".css-1czin5k")))
         search_button.click()
@@ -112,7 +121,7 @@ def print_info():
 
 # rekam data. try except utk cegah error encoding.
     try:
-        with open("hasil.csv", "a", newline="", encoding="utf-8") as write:
+        with open(key_string+".csv", "a", newline="", encoding="utf-8") as write:
             write = csv.writer(write)
             write.writerows(datas)
     except:
@@ -156,9 +165,10 @@ def max_pages():
 
 def loop_scrap():
     for page in range(1,max_pages()): # in max_pages()
-        link = "https://www.tokopedia.com/search?page=2&q=redmi%20note%2011&sc=24&shop_tier=2&srp_component_id=02.01.00.00&st=product"
+        link = r"https://www.tokopedia.com/search?navsource=home&page=1&q=cover%20spion&srp_component_id=02.01.00.00&st=product"
         link_list = link.split("=")
-        link_list[1] = f'{page+1}&q'
+        link_list.insert(2, f'{page+1}&q')
+        link_list.insert(3, key_string+"&srp_component_id")
         link = "=".join(link_list)
         driver.switch_to.new_window()
         driver.get(link)
