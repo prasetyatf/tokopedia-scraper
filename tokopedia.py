@@ -8,10 +8,12 @@ import time
 import csv
 
 
-driver =  webdriver.Chrome('chromedriver.exe')
-driver.get('https://tokopedia.com')
-action = ActionChains(driver)
-wait = WebDriverWait(driver, 5)
+def run_browser():
+    global driver, wait, action
+    driver =  webdriver.Chrome('chromedriver.exe')
+    driver.get('https://tokopedia.com')
+    action = ActionChains(driver)
+    wait = WebDriverWait(driver, 5)
 
 
 def search(keyword):
