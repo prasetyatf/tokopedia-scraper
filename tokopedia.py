@@ -34,7 +34,7 @@ def search(keyword):
 
 # Wait then find search bar
     try: 
-        search_bar = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".css-ubsgp5")))
+        search_bar = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".e110g5pc0"))) #.css-ubsgp5
         search_bar.clear() # search bar ga mau diclear
         search_bar.send_keys(keyword)
 
@@ -42,7 +42,7 @@ def search(keyword):
         search_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".css-1czin5k")))
         search_button.click()
     except:
-        print("time out. Koneksi Internetmu mungkin lambat.")
+        print("time out. Koneksi Internetmu mungkin lambat. Error: searchbar/search button")
         driver.quit()
 
 def load_boxInfo():
@@ -125,7 +125,7 @@ def print_info():
 
 # rekam data. try except utk cegah error encoding.
     try:
-        with open(key_string+".csv", "a", newline="", encoding="utf-8") as write:
+        with open("result.csv", "a", newline="", encoding="utf-8") as write:
             write = csv.writer(write)
             write.writerows(datas)
     except:
@@ -182,4 +182,21 @@ def loop_scrap():
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
     else:
+        driver.quit()
+
+def by_link(bylink):
+    columns = ["name", "price", "shop","location"]
+    with open("result.csv", "w", newline="", encoding="utf-8") as write:
+        write = csv.writer(write)
+        write.writerow(columns)
+
+    try:
+        link = bylink
+        driver.get(link)
+        load_boxInfo()
+        scrol_down(10)
+        print_info()
+    except:
+        print("koneksi mungkin lambat. by_link error")
+    finally:
         driver.quit()
